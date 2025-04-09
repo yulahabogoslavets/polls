@@ -1,6 +1,5 @@
 import './App.css';
-import { BarChart, Bar, ResponsiveContainer, XAxis } from 'recharts';
-import { useState } from 'react';
+import { Poll } from './components/Poll';
 
 const dataArray = [
   {
@@ -18,44 +17,15 @@ const dataArray = [
 ];
 
 function App() {
-  const [data, setData] = useState(dataArray);
-  const [pollStatus, setPollStatus] = useState(0);
-
-  const onPollChange = (event) => {
-    const objName = event?.target.innerText;
-    const newData = data.filter((item) => {
-      if (item.name !== objName) {
-        return item;
-      }
-      return { ...item, value: item.value++ };
-    });
-
-    setData(newData);
-    setPollStatus(1);
-  };
   return (
     <>
-      <h1 className="text-red-500">hello</h1>
+      <main className="flex flex-col items-center justify-center min-h-screen bg-gray-200">
+        <h1 className="text-3xl font-bold">My Poll</h1>
 
-      {
-        {
-          1: (
-            <ResponsiveContainer width="100%" height={500}>
-              <BarChart data={data} margin={{ bottom: 120 }}>
-                <Bar dataKey="value" fill="#8884d8" />
-                <XAxis dataKey={'name'} interval={0} angle={-10} dy={32} />
-              </BarChart>
-            </ResponsiveContainer>
-          ),
-          0: data.map((item, index) => {
-            return (
-              <button key={index} onClick={onPollChange}>
-                {item.name}
-              </button>
-            );
-          }),
-        }[pollStatus]
-      }
+        <div className="flex flex-wrap gap-4 items-center justify-center my-8">
+          <Poll dataArray={dataArray} color="#05def3" />
+        </div>
+      </main>
     </>
   );
 }
