@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import { Poll } from './components/Poll';
+import { Modal } from './components/Modal';
 
 function App() {
   const [dataArray, setDataArray] = useState([]);
@@ -13,9 +14,11 @@ function App() {
   return (
     <>
       <main className="flex flex-col items-center justify-center min-h-screen bg-gray-200">
-        <h1 className="text-3xl font-bold">My Poll</h1>
+        <h1 className="text-3xl font-bold mb-4">My Poll</h1>
 
-        <div className="flex flex-wrap gap-4 items-center justify-center my-8">
+        <Modal />
+
+        <div className="flex flex-wrap gap-4 items-center justify-center mt-8">
           {dataArray.length
             ? dataArray.map((item, index) => {
                 return <Poll key={index} dataArray={item} />;
