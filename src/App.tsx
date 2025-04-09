@@ -8,15 +8,22 @@ function App() {
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('dataArray'));
+    if (!storedData) {
+      return;
+    }
     setDataArray(storedData);
   }, []);
+
+  useEffect(() => {
+    console.log('Data Array:', dataArray);
+  }, [dataArray]);
 
   return (
     <>
       <main className="flex flex-col items-center justify-center min-h-screen bg-gray-200">
         <h1 className="text-3xl font-bold mb-4">My Poll</h1>
 
-        <Modal />
+        <Modal dataArray={dataArray} setDataArray={setDataArray} />
 
         <div className="flex flex-wrap gap-4 items-center justify-center mt-8">
           {dataArray.length
