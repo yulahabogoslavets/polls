@@ -19,6 +19,7 @@ const dataArray = [
 
 function App() {
   const [data, setData] = useState(dataArray);
+  const [pollStatus, setPollStatus] = useState(0);
 
   const onPollChange = (event) => {
     const objName = event?.target.innerText;
@@ -30,24 +31,31 @@ function App() {
     });
 
     setData(newData);
+    setPollStatus(1);
   };
   return (
     <>
       <h1 className="text-red-500">hello</h1>
-      <ResponsiveContainer width="100%" height={500}>
-        <BarChart data={data} margin={{ bottom: 120 }}>
-          <Bar dataKey="value" fill="#8884d8" />
-          <XAxis dataKey={'name'} interval={0} angle={-10} dy={32} />
-        </BarChart>
-      </ResponsiveContainer>
 
-      {data.map((item, index) => {
-        return (
-          <button key={index} onClick={onPollChange}>
-            {item.name}
-          </button>
-        );
-      })}
+      {
+        {
+          1: (
+            <ResponsiveContainer width="100%" height={500}>
+              <BarChart data={data} margin={{ bottom: 120 }}>
+                <Bar dataKey="value" fill="#8884d8" />
+                <XAxis dataKey={'name'} interval={0} angle={-10} dy={32} />
+              </BarChart>
+            </ResponsiveContainer>
+          ),
+          0: data.map((item, index) => {
+            return (
+              <button key={index} onClick={onPollChange}>
+                {item.name}
+              </button>
+            );
+          }),
+        }[pollStatus]
+      }
     </>
   );
 }
