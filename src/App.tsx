@@ -2,21 +2,28 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import { Poll } from './components/Poll';
 import { Modal } from './components/Modal';
+import { PollData } from './lib/interfaces';
 
 function App() {
-  const [dataArray, setDataArray] = useState([]);
+  const [dataArray, setDataArray] = useState<Array<PollData>>([]);
 
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('dataArray'));
+    const storedData = localStorage.getItem('dataArray')
+      ? JSON.parse(localStorage.getItem('dataArray') as string)
+      : null;
     if (!storedData) {
       return;
     }
-    setDataArray(storedData);
+    setDataArray(
+      storedData.map((item: Partial<PollData>) => ({
+        ...item,
+        color: item.color || '#FFFFFF',
+      }))
+    );
+    return () => {};
   }, []);
 
-  useEffect(() => {
-    console.log('Data Array:', dataArray);
-  }, [dataArray]);
+  useEffect(() => {}, [dataArray]);
 
   return (
     <>
@@ -28,7 +35,9 @@ function App() {
         <div className="flex flex-wrap gap-4 items-center justify-center mt-8">
           {dataArray.length
             ? dataArray.map((item, index) => {
-                return <Poll key={index} dataObj={item} dataArray={dataArray} />;
+                return (
+                  <Poll key={index} dataObj={item} dataArray={dataArray} />
+                );
               })
             : 'No Polls Available, create one!'}
         </div>
