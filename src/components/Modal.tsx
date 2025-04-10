@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { InputChangeEvent } from '../lib/interfaces'
 import { PollContext } from '../context/Poll.context'
 import { LoaderContext } from '../context/Loader.context'
+import { InputField } from './InputField'
 
 export function Modal() {
     const pollContext = useContext(PollContext)
@@ -189,9 +190,32 @@ export function Modal() {
 
     return (
         <>
+            {!loading && (
+                <button
+                    onClick={onTriggerModal}
+                    className="hocus:animate-pulse hocus:brightness-110 hocus:cursor-pointer my-4 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 px-4 py-1 font-bold text-white md:my-8 md:px-6 md:py-3"
+                >
+                    Create Poll
+                </button>
+            )}
             {modal && (
-                <div className="absolute top-1/2 left-1/2 z-10 w-full max-w-md -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-white p-12 shadow-lg">
-                    <h3 className="text-center">Create Poll</h3>
+                <div className="absolute top-1/2 left-1/2 z-10 w-full max-w-md -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-gray-300 p-12 shadow-lg">
+                    <button
+                        onClick={onTriggerModal}
+                        title="Close Modal"
+                        aria-label="Close Modal"
+                        className="hocus:bg-gray-500 group hocus:cursor-pointer absolute top-4 right-4 rounded bg-gray-400 px-4 py-2 font-bold"
+                    >
+                        <span
+                            aria-hidden="true"
+                            className="text-gray-800 group-hover:text-white group-focus:text-white"
+                        >
+                            X
+                        </span>
+                    </button>
+                    <h1 className="text-center text-2xl text-black italic">
+                        Create Poll
+                    </h1>
                     <form
                         className="mt-4 flex flex-col items-center justify-center"
                         onSubmit={onCreatePoll}
@@ -199,73 +223,54 @@ export function Modal() {
                         {error && (
                             <p className="mb-4 text-sm text-red-500">{error}</p>
                         )}
-                        <input
-                            type="text"
+
+                        <InputField
+                            id="question"
                             name="title"
-                            placeholder="Question"
-                            className={`mb-4 w-full rounded border-2 p-2 ${
-                                fieldErrors.title
-                                    ? 'border-red-500'
-                                    : 'border-gray-300'
-                            }`}
+                            placeholder=" "
+                            value={formData.title}
                             onChange={onInputChange}
+                            error={fieldErrors.title}
+                            label="Question"
                         />
-                        <input
-                            type="text"
+
+                        <InputField
+                            id="option1"
                             name="option1"
-                            placeholder="Option 1"
-                            className={`mb-4 w-full rounded border-2 p-2 ${
-                                fieldErrors.option1
-                                    ? 'border-red-500'
-                                    : 'border-gray-300'
-                            }`}
+                            placeholder=" "
+                            value={formData.option1}
                             onChange={onInputChange}
+                            error={fieldErrors.option1}
+                            label="Option 1"
                         />
-                        <input
-                            type="text"
+
+                        <InputField
+                            id="option2"
                             name="option2"
-                            placeholder="Option 2"
-                            className={`mb-4 w-full rounded border-2 p-2 ${
-                                fieldErrors.option2
-                                    ? 'border-red-500'
-                                    : 'border-gray-300'
-                            }`}
+                            placeholder=" "
+                            value={formData.option2}
                             onChange={onInputChange}
+                            error={fieldErrors.option2}
+                            label="Option 2"
                         />
-                        <input
-                            type="text"
+
+                        <InputField
+                            id="option3"
                             name="option3"
-                            placeholder="Option 3"
-                            className={`mb-4 w-full rounded border-2 p-2 ${
-                                fieldErrors.option3
-                                    ? 'border-red-500'
-                                    : 'border-gray-300'
-                            }`}
+                            placeholder=" "
+                            value={formData.option3}
                             onChange={onInputChange}
+                            error={fieldErrors.option3}
+                            label="Option 3"
                         />
                         <button
                             type="submit"
-                            className="rounded bg-blue-500 p-2 text-white"
+                            className="hocus:animate-pulse hocus:brightness-110 hocus:cursor-pointer my-2 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 px-6 py-3 font-bold text-white"
                         >
                             Create
                         </button>
                     </form>
-                    <button
-                        onClick={onTriggerModal}
-                        className="absolute top-4 right-8 inline-flex rounded bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:cursor-pointer hover:bg-gray-200"
-                    >
-                        X
-                    </button>
                 </div>
-            )}
-
-            {!loading && (
-                <button
-                    onClick={onTriggerModal}
-                    className="absolute top-24 right-24 inline-flex rounded bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:cursor-pointer hover:bg-gray-200"
-                >
-                    Create Poll
-                </button>
             )}
         </>
     )

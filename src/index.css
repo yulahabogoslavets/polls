@@ -1,1 +1,7 @@
 @import 'tailwindcss';
+
+@custom-variant hocus (&:hover, &:focus);
+
+button {
+    @apply hocus:cursor-pointer;
+}

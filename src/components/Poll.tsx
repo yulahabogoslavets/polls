@@ -49,8 +49,8 @@ export function Poll({ dataObj }: PollProps) {
 
     return (
         <>
-            <div className="width-full flex h-full min-h-[400px] flex-col items-center justify-center gap-4 rounded-lg border-gray-800 bg-gray-400 p-8">
-                <h2 className="mb-4">{title}</h2>
+            <div className="width-full flex h-full min-h-[400px] flex-col items-center justify-center gap-4 overflow-y-auto rounded-lg bg-gray-950 p-4 md:p-8">
+                <h2 className="mb-4 text-2xl text-white">{title}</h2>
                 {
                     {
                         1: (
@@ -66,6 +66,7 @@ export function Poll({ dataObj }: PollProps) {
                                     interval={0}
                                     angle={-10}
                                     dy={32}
+                                    tick={{ fill: '#ffffff' }}
                                 />
                             </BarChart>
                         ),
@@ -76,7 +77,7 @@ export function Poll({ dataObj }: PollProps) {
                                         <button
                                             key={index}
                                             onClick={onPollChange}
-                                            className="inline-flex rounded bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:cursor-pointer hover:bg-gray-200"
+                                            className="inline-flex items-center justify-center rounded-md bg-gray-800 px-5 py-2 font-semibold text-white shadow-sm transition hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:outline-none"
                                         >
                                             {item.name}
                                         </button>
@@ -88,7 +89,7 @@ export function Poll({ dataObj }: PollProps) {
                 }
                 <button
                     onClick={onPollDelete}
-                    className="inline-flex rounded bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:cursor-pointer hover:bg-gray-200"
+                    className="inline-flex items-center justify-center rounded-md bg-red-500 px-5 py-2 font-bold text-white shadow-sm transition hover:bg-red-800 focus:ring-2 focus:ring-red-500 focus:outline-none"
                 >
                     Delete
                 </button>
