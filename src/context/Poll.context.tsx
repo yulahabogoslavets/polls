@@ -1,10 +1,16 @@
-import { createContext, useState, useEffect, useContext } from 'react'
 import {
-    PollData,
-    PollContextType,
-    PollContextProviderProps,
-} from '../lib/interfaces'
+    createContext,
+    useState,
+    useEffect,
+    useContext,
+    ReactNode,
+} from 'react'
+import { PollData, PollContextType } from '../lib/interfaces'
 import { LoaderContext } from './Loader.context'
+
+interface PollContextProviderProps {
+    children: ReactNode
+}
 
 export const PollContext = createContext<PollContextType | undefined>(undefined)
 
