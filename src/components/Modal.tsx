@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 export function Modal({ dataArray, setDataArray }) {
   const [modal, setModal] = useState(false);
@@ -45,6 +46,8 @@ export function Modal({ dataArray, setDataArray }) {
       {
         title: formData.title,
         options: options,
+        id: uuidv4(),
+        status: 0,
       },
     ];
 
@@ -59,7 +62,7 @@ export function Modal({ dataArray, setDataArray }) {
       {
         {
           true: (
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-12 rounded-md shadow-lg w-full max-w-md">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-12 rounded-md shadow-lg w-full max-w-md z-10">
               <h3 className="text-center">Create Poll</h3>
               <form className="flex flex-col items-center justify-center mt-4">
                 <input

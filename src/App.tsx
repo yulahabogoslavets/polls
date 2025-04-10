@@ -28,7 +28,7 @@ function App() {
         <div className="flex flex-wrap gap-4 items-center justify-center mt-8">
           {dataArray.length
             ? dataArray.map((item, index) => {
-                return <Poll key={index} dataArray={item} />;
+                return <Poll key={index} dataObj={item} dataArray={dataArray} />;
               })
             : 'No Polls Available, create one!'}
         </div>

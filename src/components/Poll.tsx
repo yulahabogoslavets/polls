@@ -12,11 +12,12 @@ interface DataItem {
   options: Option[];
 }
 interface PollProps {
-  dataArray: DataItem[];
+  dataObj: DataItem[];
+  dataArray: { id: string; status: number }[];
 }
 
-export function Poll({ dataArray }: PollProps) {
-  const [data, setData] = useState(dataArray);
+export function Poll({ dataObj, dataArray }: PollProps) {
+  const [data, setData] = useState(dataObj);
   const [pollStatus, setPollStatus] = useState(0);
 
   const onPollChange = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -27,6 +28,16 @@ export function Poll({ dataArray }: PollProps) {
       }
       return { ...item, value: item.value++ };
     });
+
+    const newLocalStorageArray = dataArray.filter((item) => {
+      if (item.id !== dataObj.id) {
+        return item;
+      }
+      item.status = 1;
+      return item;
+    });
+
+    localStorage.setItem('dataArray', JSON.stringify(newLocalStorageArray));
 
     setData({ ...data, options: newData });
     setPollStatus(1);
@@ -63,7 +74,7 @@ export function Poll({ dataArray }: PollProps) {
                 })}
               </div>
             ),
-          }[pollStatus]
+          }[(pollStatus, dataObj.status)]
         }
       </div>
     </>
