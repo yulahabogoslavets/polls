@@ -2,13 +2,21 @@ import { useState, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { InputChangeEvent } from '../lib/interfaces';
 import { PollContext } from '../context/Poll.context';
+import { LoaderContext } from '../context/Loader.context';
 
 export function Modal() {
   const pollContext = useContext(PollContext);
   if (!pollContext) {
     throw new Error('PollContext must be used within a PollContextProvider');
   }
+  const loaderContext = useContext(LoaderContext);
+  if (!loaderContext) {
+    throw new Error(
+      'LoaderContext must be used within a LoaderContextProvider'
+    );
+  }
   const { polls, setPolls } = pollContext;
+  const { loading } = loaderContext;
 
   const [modal, setModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -241,12 +249,14 @@ export function Modal() {
         </div>
       )}
 
-      <button
-        onClick={onTriggerModal}
-        className="absolute top-24 right-24 bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex hover:bg-gray-200 hover:cursor-pointer"
-      >
-        Create Poll
-      </button>
+      {!loading && (
+        <button
+          onClick={onTriggerModal}
+          className="absolute top-24 right-24 bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex hover:bg-gray-200 hover:cursor-pointer"
+        >
+          Create Poll
+        </button>
+      )}
     </>
   );
 }
