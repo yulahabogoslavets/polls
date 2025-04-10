@@ -1,5 +1,5 @@
 export function trapFocus(
-    modalRef: React.RefObject<HTMLDivElement>,
+    modalRef: React.RefObject<HTMLDivElement | null>,
     onClose: () => void
 ) {
     if (!modalRef.current) return () => {}

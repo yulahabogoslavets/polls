@@ -1,4 +1,4 @@
-import { useState, useContext, useRef, useEffect } from 'react'
+import { useState, useContext, useRef, useEffect, useCallback } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { InputChangeEvent } from '../lib/interfaces'
 import { PollContext } from '../context/Poll.context'
@@ -37,8 +37,8 @@ export function Modal() {
 
     const modalRef = useRef<HTMLDivElement>(null)
 
-    const onTriggerModal = () => {
-        setModal(!modal)
+    const onTriggerModal = useCallback(() => {
+        setModal((prevModal) => !prevModal)
         setError(null)
         setFieldErrors({
             title: false,
@@ -46,14 +46,17 @@ export function Modal() {
             option2: false,
             option3: false,
         })
-    }
+    }, [])
 
     useEffect(() => {
         if (modal) {
-            const cleanup = trapFocus(modalRef, onTriggerModal)
+            const cleanup = trapFocus(
+                modalRef as React.RefObject<HTMLDivElement>,
+                onTriggerModal
+            )
             return cleanup
         }
-    }, [modal])
+    }, [modal, onTriggerModal])
 
     const onInputChange = (event: InputChangeEvent) => {
         const stateProp = event.target.name
