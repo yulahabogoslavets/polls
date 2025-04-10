@@ -1,8 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { ModalProps, InputChangeEvent } from '../lib/interfaces';
+import { InputChangeEvent } from '../lib/interfaces';
+import { PollContext } from '../context/Poll.context';
 
-export function Modal({ dataArray, setDataArray }: ModalProps) {
+export function Modal() {
+  const pollContext = useContext(PollContext);
+  if (!pollContext) {
+    throw new Error('PollContext must be used within a PollContextProvider');
+  }
+  const { polls, setPolls } = pollContext;
+
   const [modal, setModal] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -43,17 +50,17 @@ export function Modal({ dataArray, setDataArray }: ModalProps) {
     ];
 
     const newDataArray = [
-      ...dataArray,
+      ...polls,
       {
         title: formData.title,
         options: options,
         id: uuidv4(),
         status: 0,
-        color: '#FFFFFF', 
+        color: '#FFFFFF',
       },
     ];
 
-    setDataArray(newDataArray);
+    setPolls(newDataArray);
 
     localStorage.setItem('dataArray', JSON.stringify(newDataArray));
     setModal(false);
@@ -64,7 +71,10 @@ export function Modal({ dataArray, setDataArray }: ModalProps) {
       {modal && (
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-12 rounded-md shadow-lg w-full max-w-md z-10">
           <h3 className="text-center">Create Poll</h3>
-          <form className="flex flex-col items-center justify-center mt-4" onSubmit={onCreatePoll}>
+          <form
+            className="flex flex-col items-center justify-center mt-4"
+            onSubmit={onCreatePoll}
+          >
             <input
               type="text"
               name="title"

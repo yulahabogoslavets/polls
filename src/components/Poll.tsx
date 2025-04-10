@@ -1,9 +1,16 @@
 import { Bar, BarChart, XAxis } from 'recharts';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useContext } from 'react';
 import { PollProps } from '../lib/interfaces';
 import { getRandomColor } from '../lib/colorGen.tool';
+import { PollContext } from '../context/Poll.context';
 
-export function Poll({ dataObj, dataArray, setDataArray }: PollProps) {
+export function Poll({ dataObj }: PollProps) {
+  const pollContext = useContext(PollContext);
+  if (!pollContext) {
+    throw new Error('PollContext must be used within a PollContextProvider');
+  }
+  const { polls, setPolls } = pollContext;
+  
   const [pollStatus, setPollStatus] = useState<0 | 1>(dataObj.status as 0 | 1);
   const { options, id, title } = dataObj;
 
@@ -15,7 +22,7 @@ export function Poll({ dataObj, dataArray, setDataArray }: PollProps) {
       return { ...item, value: item.value++ };
     });
 
-    const newLocalStorageArray = dataArray.filter((item) => {
+    const newLocalStorageArray = polls.filter((item) => {
       if (item.id !== id) {
         return item;
       }
@@ -31,12 +38,12 @@ export function Poll({ dataObj, dataArray, setDataArray }: PollProps) {
   }, []);
 
   const onPollDelete = () => {
-    const newDataArray = dataArray.filter((item) => {
+    const newDataArray = polls.filter((item) => {
       if (id !== item.id) {
         return item;
       }
     });
-    setDataArray(newDataArray);
+    setPolls(newDataArray);
     localStorage.setItem('dataArray', JSON.stringify(newDataArray));
   };
 

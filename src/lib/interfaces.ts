@@ -16,7 +16,6 @@ export interface PollData {
 // Props for the Poll component
 export interface PollProps {
   dataObj: PollData;
-  dataArray: PollData[];
 }
 
 // Props for the Modal component
@@ -26,5 +25,14 @@ export interface ModalProps {
 }
 
 export interface InputChangeEvent extends React.ChangeEvent<HTMLInputElement> {
-  target: HTMLInputElement & { name: keyof FormDataType; value: string };
+  target: HTMLInputElement & { name: string; value: string };
+}
+
+export interface PollContextType {
+  polls: PollData[];
+  setPolls: React.Dispatch<React.SetStateAction<PollData[]>>;
+}
+
+export interface PollContextProviderProps {
+  children: ReactNode;
 }
