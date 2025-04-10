@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { InputChangeEvent } from '../lib/interfaces';
 import { PollContext } from '../context/Poll.context';
@@ -17,9 +17,23 @@ export function Modal() {
     option2: '',
     option3: '',
   });
+  const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState({
+    title: false,
+    option1: false,
+    option2: false,
+    option3: false,
+  });
 
   const onTriggerModal = () => {
     setModal(!modal);
+    setError(null);
+    setFieldErrors({
+      title: false,
+      option1: false,
+      option2: false,
+      option3: false,
+    });
   };
 
   const onInputChange = (event: InputChangeEvent) => {
@@ -27,12 +41,111 @@ export function Modal() {
     const stateValue = event.target.value;
 
     setFormData({ ...formData, [stateProp]: stateValue });
+    setFieldErrors({ ...fieldErrors, [stateProp]: false });
+
+    // Check if all fields are filled and clear the error message
+    const updatedFormData = { ...formData, [stateProp]: stateValue };
+    const { title, option1, option2, option3 } = updatedFormData;
+
+    if (title && option1 && option2 && option3) {
+      setError(null); // Clear the error message if all fields are filled
+    }
+    setFieldErrors({ ...fieldErrors, [stateProp]: false }); // Clear field error on input
   };
 
-  useEffect(() => {}, [formData]);
+  const validateForm = () => {
+    const newFieldErrors: {
+      title: boolean;
+      option1: boolean;
+      option2: boolean;
+      option3: boolean;
+    } = {
+      title: false,
+      option1: false,
+      option2: false,
+      option3: false,
+    };
+    const errorMessages: string[] = [];
+    const scriptTagRegex = /<script.*?>.*?<\/script>/i;
+
+    // Validation rules for each field
+    const validationRules = {
+      title: [
+        {
+          test: (value: string) => value.trim() !== '',
+          message: 'The question is required.',
+        },
+        {
+          test: (value: string) => value.length >= 3,
+          message: 'The question must have at least 3 characters.',
+        },
+        {
+          test: (value: string) => !scriptTagRegex.test(value),
+          message: 'Script tags are not allowed in the question.',
+        },
+      ],
+      option1: [
+        {
+          test: (value: string) => value.trim() !== '',
+          message: 'Option 1 is required.',
+        },
+        {
+          test: (value: string) => !scriptTagRegex.test(value),
+          message: 'Script tags are not allowed in Option 1.',
+        },
+      ],
+      option2: [
+        {
+          test: (value: string) => value.trim() !== '',
+          message: 'Option 2 is required.',
+        },
+        {
+          test: (value: string) => !scriptTagRegex.test(value),
+          message: 'Script tags are not allowed in Option 2.',
+        },
+      ],
+      option3: [
+        {
+          test: (value: string) => value.trim() !== '',
+          message: 'Option 3 is required.',
+        },
+        {
+          test: (value: string) => !scriptTagRegex.test(value),
+          message: 'Script tags are not allowed in Option 3.',
+        },
+      ],
+    };
+
+    // Validate each field
+    Object.entries(validationRules).forEach(([field, rules]) => {
+      const value = formData[field as keyof typeof formData];
+      rules.forEach((rule) => {
+        if (!rule.test(value)) {
+          newFieldErrors[field as keyof typeof newFieldErrors] = true;
+          if (!errorMessages.includes(rule.message)) {
+            errorMessages.push(rule.message);
+          }
+        }
+      });
+    });
+
+    setFieldErrors(newFieldErrors);
+
+    if (errorMessages.length > 0) {
+      setError(errorMessages.join(' '));
+      return false;
+    }
+
+    setError(null);
+    return true;
+  };
 
   const onCreatePoll = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
 
     const options = [
       {
@@ -75,32 +188,41 @@ export function Modal() {
             className="flex flex-col items-center justify-center mt-4"
             onSubmit={onCreatePoll}
           >
+            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
             <input
               type="text"
               name="title"
               placeholder="Question"
-              className="mb-4 p-2 rounded border-2 w-full"
+              className={`mb-4 p-2 rounded border-2 w-full ${
+                fieldErrors.title ? 'border-red-500' : 'border-gray-300'
+              }`}
               onChange={onInputChange}
             />
             <input
               type="text"
               name="option1"
               placeholder="Option 1"
-              className="mb-4 p-2 rounded border-2 w-full"
+              className={`mb-4 p-2 rounded border-2 w-full ${
+                fieldErrors.option1 ? 'border-red-500' : 'border-gray-300'
+              }`}
               onChange={onInputChange}
             />
             <input
               type="text"
               name="option2"
               placeholder="Option 2"
-              className="mb-4 p-2 rounded border-2 w-full"
+              className={`mb-4 p-2 rounded border-2 w-full ${
+                fieldErrors.option2 ? 'border-red-500' : 'border-gray-300'
+              }`}
               onChange={onInputChange}
             />
             <input
               type="text"
               name="option3"
               placeholder="Option 3"
-              className="mb-4 p-2 rounded border-2 w-full"
+              className={`mb-4 p-2 rounded border-2 w-full ${
+                fieldErrors.option3 ? 'border-red-500' : 'border-gray-300'
+              }`}
               onChange={onInputChange}
             />
             <button
