@@ -1,93 +1,98 @@
-import { Bar, BarChart, XAxis } from 'recharts';
-import { useState, useMemo, useContext } from 'react';
-import { PollProps } from '../lib/interfaces';
-import { getRandomColor } from '../lib/colorGen.tool';
-import { PollContext } from '../context/Poll.context';
+import { Bar, BarChart, XAxis } from 'recharts'
+import { useState, useMemo, useContext } from 'react'
+import { PollProps } from '../lib/interfaces'
+import { getRandomColor } from '../lib/colorGen.tool'
+import { PollContext } from '../context/Poll.context'
 
 export function Poll({ dataObj }: PollProps) {
-  const pollContext = useContext(PollContext);
-  if (!pollContext) {
-    throw new Error('PollContext must be used within a PollContextProvider');
-  }
-  const { polls, setPolls } = pollContext;
-  
-  const [pollStatus, setPollStatus] = useState<0 | 1>(dataObj.status as 0 | 1);
-  const { options, id, title } = dataObj;
+    const pollContext = useContext(PollContext)
+    if (!pollContext) {
+        throw new Error('PollContext must be used within a PollContextProvider')
+    }
+    const { polls, setPolls } = pollContext
 
-  const onPollChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    options.filter((item) => {
-      if (item.name !== (event.target as HTMLButtonElement).innerText) {
-        return item;
-      }
-      return { ...item, value: item.value++ };
-    });
+    const [pollStatus, setPollStatus] = useState<0 | 1>(dataObj.status as 0 | 1)
+    const { options, id, title } = dataObj
 
-    const newLocalStorageArray = polls.filter((item) => {
-      if (item.id !== id) {
-        return item;
-      }
-      return (item.status = 1);
-    });
+    const onPollChange = (event: React.MouseEvent<HTMLButtonElement>) => {
+        options.filter((item) => {
+            if (item.name !== (event.target as HTMLButtonElement).innerText) {
+                return item
+            }
+            return { ...item, value: item.value++ }
+        })
 
-    localStorage.setItem('dataArray', JSON.stringify(newLocalStorageArray));
-    setPollStatus(1);
-  };
+        const newLocalStorageArray = polls.filter((item) => {
+            if (item.id !== id) {
+                return item
+            }
+            return (item.status = 1)
+        })
 
-  const randomColor = useMemo(() => {
-    return getRandomColor();
-  }, []);
+        localStorage.setItem('dataArray', JSON.stringify(newLocalStorageArray))
+        setPollStatus(1)
+    }
 
-  const onPollDelete = () => {
-    const newDataArray = polls.filter((item) => {
-      if (id !== item.id) {
-        return item;
-      }
-    });
-    setPolls(newDataArray);
-    localStorage.setItem('dataArray', JSON.stringify(newDataArray));
-  };
+    const randomColor = useMemo(() => {
+        return getRandomColor()
+    }, [])
 
-  return (
-    <>
-      <div className="bg-gray-400 p-8 border-gray-800 rounded-lg width-full min-h-[400px] h-full flex flex-col items-center justify-center gap-4">
-        <h2 className="mb-4">{title}</h2>
-        {
-          {
-            1: (
-              <BarChart
-                data={options}
-                margin={{ bottom: 60 }}
-                width={300}
-                height={300}
-              >
-                <Bar dataKey="value" fill={randomColor} />
-                <XAxis dataKey={'name'} interval={0} angle={-10} dy={32} />
-              </BarChart>
-            ),
-            0: (
-              <div className="flex items-center justify-center gap-4 flex-wrap">
-                {options.map((item, index) => {
-                  return (
-                    <button
-                      key={index}
-                      onClick={onPollChange}
-                      className="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex hover:bg-gray-200 hover:cursor-pointer"
-                    >
-                      {item.name}
-                    </button>
-                  );
-                })}
-              </div>
-            ),
-          }[pollStatus]
-        }
-        <button
-          onClick={onPollDelete}
-          className="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex hover:bg-gray-200 hover:cursor-pointer"
-        >
-          Delete
-        </button>
-      </div>
-    </>
-  );
+    const onPollDelete = () => {
+        const newDataArray = polls.filter((item) => {
+            if (id !== item.id) {
+                return item
+            }
+        })
+        setPolls(newDataArray)
+        localStorage.setItem('dataArray', JSON.stringify(newDataArray))
+    }
+
+    return (
+        <>
+            <div className="width-full flex h-full min-h-[400px] flex-col items-center justify-center gap-4 rounded-lg border-gray-800 bg-gray-400 p-8">
+                <h2 className="mb-4">{title}</h2>
+                {
+                    {
+                        1: (
+                            <BarChart
+                                data={options}
+                                margin={{ bottom: 60 }}
+                                width={300}
+                                height={300}
+                            >
+                                <Bar dataKey="value" fill={randomColor} />
+                                <XAxis
+                                    dataKey={'name'}
+                                    interval={0}
+                                    angle={-10}
+                                    dy={32}
+                                />
+                            </BarChart>
+                        ),
+                        0: (
+                            <div className="flex flex-wrap items-center justify-center gap-4">
+                                {options.map((item, index) => {
+                                    return (
+                                        <button
+                                            key={index}
+                                            onClick={onPollChange}
+                                            className="inline-flex rounded bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:cursor-pointer hover:bg-gray-200"
+                                        >
+                                            {item.name}
+                                        </button>
+                                    )
+                                })}
+                            </div>
+                        ),
+                    }[pollStatus]
+                }
+                <button
+                    onClick={onPollDelete}
+                    className="inline-flex rounded bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:cursor-pointer hover:bg-gray-200"
+                >
+                    Delete
+                </button>
+            </div>
+        </>
+    )
 }

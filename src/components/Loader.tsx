@@ -1,11 +1,11 @@
 export function Loader() {
-  return (
-    <>
-      <div className="w-full gap-x-2 flex justify-center items-center">
-        <div className="w-5 h-5 bg-[#d991c2] rounded-full animate-bounce animate-pulse"></div>
-        <div className="w-5 h-5 bg-[#9869b8] rounded-full animate-bounce animate-pulse"></div>
-        <div className="w-5 h-5 bg-[#6756cc] rounded-full animate-bounce animate-pulse "></div>
-      </div>
-    </>
-  );
+    return (
+        <>
+            <div className="flex w-full items-center justify-center gap-x-2">
+                <div className="h-5 w-5 animate-bounce animate-pulse rounded-full bg-[#d991c2]"></div>
+                <div className="h-5 w-5 animate-bounce animate-pulse rounded-full bg-[#9869b8]"></div>
+                <div className="h-5 w-5 animate-bounce animate-pulse rounded-full bg-[#6756cc]"></div>
+            </div>
+        </>
+    )
 }
