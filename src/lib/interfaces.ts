@@ -33,10 +33,6 @@ export interface PollContextType {
     setPolls: React.Dispatch<React.SetStateAction<PollData[]>>
 }
 
-export interface PollContextProviderProps {
-    children: ReactNode
-}
-
 export interface LoadingContextType {
     loading: boolean
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
