@@ -36,7 +36,7 @@ function App() {
           {dataArray.length
             ? dataArray.map((item, index) => {
                 return (
-                  <Poll key={index} dataObj={item} dataArray={dataArray} />
+                  <Poll key={index} dataObj={item} dataArray={dataArray} setDataArray={setDataArray}/>
                 );
               })
             : 'No Polls Available, create one!'}

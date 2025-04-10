@@ -3,7 +3,7 @@ import { useState, useMemo } from 'react';
 import { PollProps } from '../lib/interfaces';
 import { getRandomColor } from '../lib/colorGen.tool';
 
-export function Poll({ dataObj, dataArray }: PollProps) {
+export function Poll({ dataObj, dataArray, setDataArray }: PollProps) {
   const [pollStatus, setPollStatus] = useState<0 | 1>(dataObj.status as 0 | 1);
   const { options, id, title } = dataObj;
 
@@ -29,9 +29,20 @@ export function Poll({ dataObj, dataArray }: PollProps) {
   const randomColor = useMemo(() => {
     return getRandomColor();
   }, []);
+
+  const onPollDelete = () => {
+    const newDataArray = dataArray.filter((item) => {
+      if (id !== item.id) {
+        return item;
+      }
+    });
+    setDataArray(newDataArray);
+    localStorage.setItem('dataArray', JSON.stringify(newDataArray));
+  };
+
   return (
     <>
-      <div className="bg-gray-400 p-8 border-gray-800 rounded-lg width-full h-[400px] flex flex-col items-center justify-center gap-4">
+      <div className="bg-gray-400 p-8 border-gray-800 rounded-lg width-full min-h-[400px] h-full flex flex-col items-center justify-center gap-4">
         <h2 className="mb-4">{title}</h2>
         {
           {
@@ -63,6 +74,12 @@ export function Poll({ dataObj, dataArray }: PollProps) {
             ),
           }[pollStatus]
         }
+        <button
+          onClick={onPollDelete}
+          className="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex hover:bg-gray-200 hover:cursor-pointer"
+        >
+          Delete
+        </button>
       </div>
     </>
   );
