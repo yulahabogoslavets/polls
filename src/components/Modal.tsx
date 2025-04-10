@@ -1,9 +1,10 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useRef, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { InputChangeEvent } from '../lib/interfaces'
 import { PollContext } from '../context/Poll.context'
 import { LoaderContext } from '../context/Loader.context'
 import { InputField } from './InputField'
+import { trapFocus } from '../lib/trapFocus'
 
 export function Modal() {
     const pollContext = useContext(PollContext)
@@ -34,6 +35,8 @@ export function Modal() {
         option3: false,
     })
 
+    const modalRef = useRef<HTMLDivElement>(null)
+
     const onTriggerModal = () => {
         setModal(!modal)
         setError(null)
@@ -44,6 +47,13 @@ export function Modal() {
             option3: false,
         })
     }
+
+    useEffect(() => {
+        if (modal) {
+            const cleanup = trapFocus(modalRef, onTriggerModal)
+            return cleanup
+        }
+    }, [modal])
 
     const onInputChange = (event: InputChangeEvent) => {
         const stateProp = event.target.name
@@ -199,7 +209,11 @@ export function Modal() {
                 </button>
             )}
             {modal && (
-                <div className="absolute top-1/2 left-1/2 z-10 w-full max-w-md -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-gray-300 p-12 shadow-lg">
+                <div
+                    ref={modalRef}
+                    tabIndex={-1}
+                    className="absolute top-1/2 left-1/2 z-10 w-full max-w-md -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-gray-300 p-12 shadow-lg"
+                >
                     <button
                         onClick={onTriggerModal}
                         title="Close Modal"
