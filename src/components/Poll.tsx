@@ -1,10 +1,11 @@
 import { Bar, BarChart, XAxis } from 'recharts';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { PollProps } from '../lib/interfaces';
+import { getRandomColor } from '../lib/colorGen.tool';
 
 export function Poll({ dataObj, dataArray }: PollProps) {
   const [pollStatus, setPollStatus] = useState<0 | 1>(dataObj.status as 0 | 1);
-  const { options, id, title, color } = dataObj;
+  const { options, id, title } = dataObj;
 
   const onPollChange = (event: React.MouseEvent<HTMLButtonElement>) => {
     options.filter((item) => {
@@ -24,6 +25,10 @@ export function Poll({ dataObj, dataArray }: PollProps) {
     localStorage.setItem('dataArray', JSON.stringify(newLocalStorageArray));
     setPollStatus(1);
   };
+
+  const randomColor = useMemo(() => {
+    return getRandomColor();
+  }, []);
   return (
     <>
       <div className="bg-gray-400 p-8 border-gray-800 rounded-lg width-full h-[400px] flex flex-col items-center justify-center gap-4">
@@ -37,7 +42,7 @@ export function Poll({ dataObj, dataArray }: PollProps) {
                 width={300}
                 height={300}
               >
-                <Bar dataKey="value" fill={color} />
+                <Bar dataKey="value" fill={randomColor} />
                 <XAxis dataKey={'name'} interval={0} angle={-10} dy={32} />
               </BarChart>
             ),
