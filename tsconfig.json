@@ -5,7 +5,9 @@
         "moduleResolution": "node",
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "lib": ["es2017", "dom"]
+        "lib": ["es2017", "dom"],
+        "module": "ESNext",
+        "target": "ESNext"
     },
     "include": ["src"],
     "exclude": ["node_modules"]
