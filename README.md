@@ -1,6 +1,9 @@
 # Polls App
 
 This is a React-based application for creating and managing polls. The app allows users to create polls, vote on options, and view results in real-time.
+Live: [Polls App](https://yulahabogoslavets.github.io/polls/)
+
+![Polls App Preview](https://yulahabogoslavets.github.io/polls/preview-image.png)
 
 ## Features
 
@@ -16,8 +19,8 @@ This is a React-based application for creating and managing polls. The app allow
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/polls-app.git
-    cd polls-app
+    git clone https://github.com/your-username/polls.git
+    cd polls
     ```
 
 2. Install dependencies:
