@@ -89,7 +89,7 @@ export function Poll({ dataObj }: PollProps) {
                 }
                 <button
                     onClick={onPollDelete}
-                    className="inline-flex items-center justify-center rounded-md bg-red-500 px-5 py-2 font-bold text-white shadow-sm transition hover:bg-red-800 focus:ring-2 focus:ring-red-500 focus:outline-none"
+                    className="inline-flex items-center justify-center rounded-md bg-red-600 px-5 py-2 font-bold text-white shadow-sm transition hover:bg-red-800 focus:ring-2 focus:ring-red-500 focus:outline-none"
                 >
                     Delete
                 </button>
