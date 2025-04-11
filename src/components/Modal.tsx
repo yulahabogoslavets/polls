@@ -215,7 +215,7 @@ export function Modal() {
                 <div
                     ref={modalRef}
                     tabIndex={-1}
-                    className="absolute top-1/2 left-1/2 z-10 w-full max-w-md -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-gray-300 p-12 shadow-lg"
+                    className="absolute top-1/2 left-1/2 z-10 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-gray-300 p-4 pt-12 shadow-lg md:p-12"
                 >
                     <button
                         onClick={onTriggerModal}

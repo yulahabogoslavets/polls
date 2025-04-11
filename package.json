@@ -10,7 +10,8 @@
         "lint": "eslint .",
         "preview": "vite preview",
         "predeploy": "npm run build",
-        "deploy": "gh-pages -d dist"
+        "deploy": "gh-pages -d dist",
+        "a11y": "pa11y http://localhost:5173/polls --runner axe --runner htmlcs"
     },
     "dependencies": {
         "@tailwindcss/vite": "^4.1.3",
