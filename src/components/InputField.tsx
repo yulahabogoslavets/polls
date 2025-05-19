@@ -3,7 +3,7 @@ import React from 'react'
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label: string
     error?: boolean
-    inputRef?: React.RefObject<HTMLInputElement>
+    inputRef?: React.RefObject<HTMLInputElement | null>
 }
 
 export function InputField({
