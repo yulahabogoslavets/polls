@@ -21,12 +21,15 @@ export function Modal() {
     const { loading } = loaderContext
 
     const [modal, setModal] = useState(false)
-    const [formData, setFormData] = useState({
+    
+    const initialFormData = {
         title: '',
         option1: '',
         option2: '',
         option3: '',
-    })
+    }
+    const [formData, setFormData] = useState(initialFormData)
+
     const [error, setError] = useState<string | null>(null)
     const [fieldErrors, setFieldErrors] = useState({
         title: false,
@@ -162,10 +165,41 @@ export function Modal() {
         return true
     }
 
+    const option1Ref = useRef<HTMLInputElement>(null)
+    const option2Ref = useRef<HTMLInputElement>(null)
+    const option3Ref = useRef<HTMLInputElement>(null)
+
     const onCreatePoll = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         if (!validateForm()) {
+            return
+        }
+
+        const optionNames = [
+            formData.option1.trim(),
+            formData.option2.trim(),
+            formData.option3.trim(),
+        ]
+        const duplicates = optionNames
+            .map((name, idx, arr) => (arr.indexOf(name) !== idx ? idx : -1))
+            .filter((idx) => idx !== -1)
+
+        if (new Set(optionNames).size !== optionNames.length) {
+            setError('Options must be unique!')
+            setFieldErrors({
+                ...fieldErrors,
+                option1: duplicates.includes(0),
+                option2: duplicates.includes(1),
+                option3: duplicates.includes(2),
+            })
+            // Fokus auf das erste doppelte Feld setzen
+            if (duplicates.includes(0) && option1Ref.current)
+                option1Ref.current.focus()
+            else if (duplicates.includes(1) && option2Ref.current)
+                option2Ref.current.focus()
+            else if (duplicates.includes(2) && option3Ref.current)
+                option3Ref.current.focus()
             return
         }
 
@@ -198,6 +232,7 @@ export function Modal() {
         setPolls(newDataArray)
 
         localStorage.setItem('dataArray', JSON.stringify(newDataArray))
+        setFormData(initialFormData)
         setModal(false)
     }
 
@@ -259,6 +294,7 @@ export function Modal() {
                             onChange={onInputChange}
                             error={fieldErrors.option1}
                             label="Option 1"
+                            inputRef={option1Ref}
                         />
 
                         <InputField
@@ -269,6 +305,7 @@ export function Modal() {
                             onChange={onInputChange}
                             error={fieldErrors.option2}
                             label="Option 2"
+                            inputRef={option2Ref}
                         />
 
                         <InputField
@@ -279,6 +316,7 @@ export function Modal() {
                             onChange={onInputChange}
                             error={fieldErrors.option3}
                             label="Option 3"
+                            inputRef={option3Ref}
                         />
                         <button
                             type="submit"
